@@ -1,34 +1,37 @@
-import requests
+import sys
 import json
-API_KEY = 'YOUR_KEY'
-OMDB_URL = 'http://www.omdbapi.com/?t=iron+man&plot=full' + API_KEY
-def get_data(url):
+#To access the OMDB API, we can create an ''OMDBClient'' instance
+from omdb import OMDBClient
+#must use OMDB API Parameters
+client = OMDBClient(apikey=API_KEY)
+print("Success, API is connected")
 
-    data = json.loads(requests.get(url).text)
+# Default for Rotten Tomato rating
+omdb.set_default('tomatoes', True) 
 
-    if data['Response'] == 'True':
+cmd_Argument = sys.argv[1].strip()
+print ("The command line argument is : %s" %(cmd_argument))
+#user Input
+#movie_name = str(input("please enter movie name : "))
+#movie_year = input("enter year as well :")
+resl = client.request(t= cmd_argument,  plot='full', tomatoes='true', timeout=5)
+xml_content = resl.content
 
-        return data
+my_json = xml_content.decode('utf8')
+print('*' * 30)
 
-    else:
+#load the json  to a python  list & dump it back out as format
+data = json.loads(my_json)
+tomato_rat = data["ratings"][1]["value"]
+print("rotten Tomato ratings is : ", tomato_rat)
+print(' & ' * 30)
+print(' & ' * 30)
 
-        return None
+# all the information about particular movie name 
+s = json. dumps(data, indent=4, sort_keys=True)
+print(s)
+  
+   
 
-def search_Titles_by_keyword(keywords):
-
-    query = '+'.join(keywords.split())  # e.g., "Iron Man" -> Iron+Man
-
-    url = OMDB_URL + '&s=' + query
-
-    data = get_data(url)
-
-    return data
-
-if __name__ == '__main__':
-
-    keyword = 'iron man'
-
-    data = search_Titles_by_keyword(keyword)
-    print(data) 
-
+   
 
