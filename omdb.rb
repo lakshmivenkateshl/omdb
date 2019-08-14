@@ -1,7 +1,6 @@
 # Needs To Install (gem install rest-client ) Before
 require 'rest-client'
 require "json"
-
 api_key = '6e3f4aa4'
 print 'Enter Movie Name: '
 name = gets.chomp
